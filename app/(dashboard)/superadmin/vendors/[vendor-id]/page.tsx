@@ -160,7 +160,7 @@ export default function VendorDetailsPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
           label="Total Revenue"
-          value={`$${(vendor.revenue / 1000).toFixed(1)}k`}
+          value={`KES ${(vendor.revenue / 1000).toFixed(1)}k`}
           icon={DollarSign}
           trend={{ value: 12, direction: 'up' }}
         />

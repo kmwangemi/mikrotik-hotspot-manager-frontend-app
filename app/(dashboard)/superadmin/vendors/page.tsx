@@ -55,7 +55,7 @@ export default function VendorsPage() {
         />
         <StatCard
           label="Platform Revenue"
-          value={`$${(totalRevenue / 1000).toFixed(1)}k`}
+          value={`KES ${(totalRevenue / 1000).toFixed(1)}k`}
           icon={DollarSign}
           trend={{ value: 18, direction: 'up' }}
         />
@@ -120,7 +120,7 @@ export default function VendorsPage() {
                       </td>
                       <td className="py-3 px-4 text-muted-foreground">{vendor.email}</td>
                       <td className="py-3 px-4 text-foreground font-semibold">
-                        ${vendor.revenue.toLocaleString()}
+                        KES{vendor.revenue.toLocaleString()}
                       </td>
                       <td className="py-3 px-4 text-foreground">{vendor.activeUsers}</td>
                       <td className="py-3 px-4 text-foreground">{vendor.activeSessions}</td>

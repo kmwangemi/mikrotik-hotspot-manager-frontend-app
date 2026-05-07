@@ -25,9 +25,9 @@ export default function TransactionsPage() {
     if (!transactions) return { transactions: [], totalPages: 0 };
     
     const filtered = transactions.filter((t) =>
-      t.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      t.transactionId.includes(searchTerm) ||
-      t.paymentMethod.toLowerCase().includes(searchTerm.toLowerCase())
+      t.userId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      t.id.includes(searchTerm) ||
+      t.packageId.toLowerCase().includes(searchTerm.toLowerCase())
     );
     
     const totalPages = Math.ceil(filtered.length / itemsPerPage);
@@ -54,7 +54,7 @@ export default function TransactionsPage() {
           <CardContent className="pt-6">
             <div className="space-y-1">
               <p className="text-sm text-muted-foreground">Total Revenue</p>
-              <p className="text-2xl font-bold text-foreground">${totalRevenue.toFixed(2)}</p>
+              <p className="text-2xl font-bold text-foreground">KES{totalRevenue.toFixed(2)}</p>
             </div>
           </CardContent>
         </Card>
@@ -144,7 +144,7 @@ export default function TransactionsPage() {
                       <td className="py-3 px-4 text-muted-foreground">{txn.userId}</td>
                       <td className="py-3 px-4 text-muted-foreground">{txn.packageId}</td>
                       <td className="py-3 px-4 text-foreground font-semibold">
-                        ${txn.amount.toFixed(2)}
+                        KES{txn.amount.toFixed(2)}
                       </td>
                       <td className="py-3 px-4">
                         <Badge
