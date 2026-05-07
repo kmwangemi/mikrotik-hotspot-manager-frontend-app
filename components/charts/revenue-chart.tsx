@@ -45,7 +45,7 @@ export function RevenueChart({
             <YAxis
               stroke='var(--muted-foreground)'
               style={{ fontSize: '12px' }}
-              tickFormatter={value => `$${(value / 1000).toFixed(0)}k`}
+              tickFormatter={value => `KES ${(value / 1000).toFixed(0)}k`}
             />
             <Tooltip
               contentStyle={{
@@ -55,7 +55,7 @@ export function RevenueChart({
               }}
               labelStyle={{ color: 'var(--foreground)' }}
               formatter={(value: number) => [
-                `$${value.toLocaleString()}`,
+                `KES ${value.toLocaleString()}`,
                 'Revenue',
               ]}
             />

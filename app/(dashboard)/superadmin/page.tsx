@@ -79,7 +79,7 @@ export default function SuperAdminDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
           label="Total Revenue"
-          value={`$${(totalRevenue / 1000).toFixed(1)}k`}
+          value={`KES ${(totalRevenue / 1000).toFixed(1)}k`}
           icon={DollarSign}
           trend={{ value: 15, direction: 'up' }}
         />
@@ -179,7 +179,7 @@ export default function SuperAdminDashboard() {
                         </Link>
                       </td>
                       <td className="py-3 px-4 text-foreground font-semibold">
-                        ${vendor.revenue.toLocaleString()}
+                        KES{vendor.revenue.toLocaleString()}
                       </td>
                       <td className="py-3 px-4 text-foreground">{vendor.activeUsers}</td>
                       <td className="py-3 px-4">

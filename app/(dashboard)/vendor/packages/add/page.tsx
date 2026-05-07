@@ -115,7 +115,7 @@ export default function AddPackagePage() {
                   name='price'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Price ($)</FormLabel>
+                      <FormLabel>Price (KES)</FormLabel>
                       <FormControl>
                         <Input
                           type='number'

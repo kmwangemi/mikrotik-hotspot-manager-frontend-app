@@ -153,7 +153,7 @@ export default function LandingPage() {
                     <div className='text-xs text-muted-foreground mb-1'>
                       Daily Revenue
                     </div>
-                    <div className='text-2xl font-bold text-accent'>$4,250</div>
+                    <div className='text-2xl font-bold text-accent'>KES 4,250</div>
                   </div>
                 </div>
               </div>

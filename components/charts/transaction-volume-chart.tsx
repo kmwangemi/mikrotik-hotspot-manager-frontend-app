@@ -62,7 +62,7 @@ export function TransactionVolumeChart({
               fill='var(--chart-1)'
               name='Transactions'
             />
-            <Bar dataKey='value' fill='var(--chart-3)' name='Value ($)' />
+            <Bar dataKey='value' fill='var(--chart-3)' name='Value (KES)' />
           </BarChart>
         </ResponsiveContainer>
       </CardContent>

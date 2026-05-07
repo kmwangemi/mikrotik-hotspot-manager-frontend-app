@@ -90,7 +90,7 @@ export default function PackagesPage() {
             <div>
               <p className='text-sm text-muted-foreground'>Total Price Value</p>
               <p className='text-2xl font-bold text-foreground'>
-                ${totalPrice.toFixed(2)}
+                KES{totalPrice.toFixed(2)}
               </p>
             </div>
           </div>
@@ -120,7 +120,7 @@ export default function PackagesPage() {
                       </div>
                       <div className='text-right'>
                         <p className='text-2xl font-bold text-primary'>
-                          ${pkg.price.toFixed(2)}
+                          KES{pkg.price.toFixed(2)}
                         </p>
                       </div>
                     </div>

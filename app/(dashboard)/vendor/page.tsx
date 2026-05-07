@@ -79,7 +79,7 @@ export default function VendorDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
           label="Total Revenue"
-          value={`$${totalRevenue.toFixed(2)}`}
+          value={`KES ${totalRevenue.toFixed(2)}`}
           icon={DollarSign}
           trend={{ value: 12, direction: 'up' }}
         />
@@ -165,7 +165,7 @@ export default function VendorDashboard() {
                     <tr key={txn.id} className="border-b border-border hover:bg-background/50">
                       <td className="py-3 px-4 text-foreground">{txn.userId}</td>
                       <td className="py-3 px-4 text-foreground font-semibold">
-                        ${txn.amount.toFixed(2)}
+                        KES{txn.amount.toFixed(2)}
                       </td>
                       <td className="py-3 px-4">
                         <span
