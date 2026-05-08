@@ -21,11 +21,11 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
+import { useAuthStore } from '@/lib/store/auth';
 import {
   passwordChangeSchema,
   profileUpdateSchema,
-} from '@/lib/schemas/profile';
-import { useAuthStore } from '@/lib/store/auth';
+} from '@/lib/validations/profile';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeft, Eye, EyeOff, Lock, Save } from 'lucide-react';
 import Link from 'next/link';
@@ -116,7 +116,7 @@ export default function SuperAdminProfilePage() {
       <div className='flex items-center justify-between'>
         <div>
           <div className='flex items-center gap-2'>
-            <Link href='/dashboard/superadmin'>
+            <Link href='/superadmin'>
               <button className='p-1 hover:bg-background/50 rounded transition-colors'>
                 <ArrowLeft className='w-5 h-5 text-muted-foreground' />
               </button>

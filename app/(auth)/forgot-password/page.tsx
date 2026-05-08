@@ -14,7 +14,7 @@ import { useToast } from '@/hooks/use-toast';
 import {
   forgotPasswordSchema,
   type ForgotPasswordFormData,
-} from '@/lib/schemas/auth';
+} from '@/lib/validations/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';

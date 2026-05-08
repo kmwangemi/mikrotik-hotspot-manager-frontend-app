@@ -5,7 +5,10 @@ import { VendorAdminForm } from '@/components/forms/vendor-admin-form';
 import { VendorBusinessForm } from '@/components/forms/vendor-business-form';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import type { AdminInfoFormData, BusinessInfoFormData } from '@/lib/schemas/vendor';
+import type {
+  AdminInfoFormData,
+  BusinessInfoFormData,
+} from '@/lib/validations/vendor';
 import { useMutation } from '@tanstack/react-query';
 import { ChevronLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -17,13 +20,15 @@ export default function AddVendorPage() {
   const router = useRouter();
   const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState<FormStep>('business');
-  const [businessData, setBusinessData] = useState<BusinessInfoFormData | null>(null);
+  const [businessData, setBusinessData] = useState<BusinessInfoFormData | null>(
+    null,
+  );
   const [emailVerified, setEmailVerified] = useState(false);
 
   // Mock subdomain verification
   const verifySubdomain = async (subdomain: string): Promise<boolean> => {
     // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 1000));
     // Mock: some domains are unavailable
     const unavailableDomains = ['admin', 'api', 'test', 'demo', 'example'];
     return !unavailableDomains.includes(subdomain);
@@ -33,7 +38,7 @@ export default function AddVendorPage() {
   const sendVerificationCode = async (email: string): Promise<void> => {
     console.log('[v0] Sending verification code to:', email);
     // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    await new Promise(resolve => setTimeout(resolve, 1500));
     // In real app, this would send an email with code
     toast({
       title: 'Verification code sent',
@@ -49,7 +54,7 @@ export default function AddVendorPage() {
     }) => {
       console.log('[v0] Creating vendor:', data);
       // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await new Promise(resolve => setTimeout(resolve, 2000));
       return { id: 'vendor-' + Date.now(), ...data };
     },
     onSuccess: () => {
@@ -59,7 +64,7 @@ export default function AddVendorPage() {
       });
       router.push('/superadmin/vendors');
     },
-    onError: (error) => {
+    onError: error => {
       toast({
         title: 'Error creating vendor',
         description: 'Please try again or contact support',

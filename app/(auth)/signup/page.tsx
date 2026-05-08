@@ -18,8 +18,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { signupSchema, type SignupFormData } from '@/lib/schemas/auth';
 import { useAuthStore } from '@/lib/store/auth';
+import { signupSchema, type SignupFormData } from '@/lib/validations/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -63,11 +63,7 @@ export default function SignupPage() {
       });
 
       // Redirect based on role
-      router.push(
-        data.role === 'superadmin'
-          ? '/dashboard/superadmin'
-          : '/dashboard/vendor',
-      );
+      router.push(data.role === 'superadmin' ? '/superadmin' : '/vendor');
     } catch (error) {
       toast({
         title: 'Error',

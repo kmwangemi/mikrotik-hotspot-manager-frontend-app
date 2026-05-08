@@ -72,7 +72,7 @@ export default function RoutersPage() {
               <RouterStatusCard
                 key={router.id}
                 router={router}
-                href={`/dashboard/vendor/routers/${router.id}`}
+                href={`/vendor/routers/${router.id}`}
               />
             ))}
           </div>
@@ -120,7 +120,7 @@ export default function RoutersPage() {
       ) : (
         <div className='flex flex-col items-center justify-center h-64 rounded-lg border border-border bg-card'>
           <p className='text-muted-foreground mb-4'>No routers yet</p>
-          <Link href='/dashboard/vendor/routers/add'>
+          <Link href='/vendor/routers/add'>
             <Button className='bg-primary hover:bg-primary/90 text-primary-foreground gap-2'>
               <Plus className='w-4 h-4' />
               Add First Router

@@ -7,7 +7,7 @@ import { useToast } from '@/hooks/use-toast';
 import type {
   AdminInfoFormData,
   BusinessInfoFormData,
-} from '@/lib/schemas/vendor';
+} from '@/lib/validations/vendor';
 import { useMutation } from '@tanstack/react-query';
 import { ChevronLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -48,7 +48,7 @@ export default function AddVendorPage() {
         title: 'Vendor created successfully',
         description: 'The new vendor has been added to the platform',
       });
-      router.push('/dashboard/superadmin/vendors');
+      router.push('/superadmin/vendors');
     },
     onError: error => {
       toast({

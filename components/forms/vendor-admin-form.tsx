@@ -2,7 +2,13 @@
 
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -13,7 +19,10 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { adminInfoSchema, type AdminInfoFormData } from '@/lib/schemas/vendor';
+import {
+  adminInfoSchema,
+  type AdminInfoFormData,
+} from '@/lib/validations/vendor';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { useState } from 'react';
@@ -34,7 +43,9 @@ export function VendorAdminForm({
 }: VendorAdminFormProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [passwordStrength, setPasswordStrength] = useState<'weak' | 'fair' | 'good' | 'strong' | null>(null);
+  const [passwordStrength, setPasswordStrength] = useState<
+    'weak' | 'fair' | 'good' | 'strong' | null
+  >(null);
 
   const form = useForm<AdminInfoFormData>({
     resolver: zodResolver(adminInfoSchema),
@@ -90,30 +101,26 @@ export function VendorAdminForm({
   };
 
   return (
-    <Card className="w-full">
+    <Card className='w-full'>
       <CardHeader>
-        <CardTitle className="text-2xl">Admin Information</CardTitle>
+        <CardTitle className='text-2xl'>Admin Information</CardTitle>
         <CardDescription>
           Create an admin account for managing the vendor platform
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
             {/* First Name and Last Name Row */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
               <FormField
                 control={form.control}
-                name="firstName"
+                name='firstName'
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>First Name</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="John"
-                        {...field}
-                        className="h-10"
-                      />
+                      <Input placeholder='John' {...field} className='h-10' />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -121,16 +128,12 @@ export function VendorAdminForm({
               />
               <FormField
                 control={form.control}
-                name="lastName"
+                name='lastName'
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Last Name</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Doe"
-                        {...field}
-                        className="h-10"
-                      />
+                      <Input placeholder='Doe' {...field} className='h-10' />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -140,43 +143,46 @@ export function VendorAdminForm({
             {/* Password */}
             <FormField
               control={form.control}
-              name="password"
+              name='password'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormDescription>
-                    Must contain uppercase, lowercase, number, and special character
+                    Must contain uppercase, lowercase, number, and special
+                    character
                   </FormDescription>
                   <FormControl>
-                    <div className="relative">
+                    <div className='relative'>
                       <Input
                         type={showPassword ? 'text' : 'password'}
-                        placeholder="Enter a strong password"
+                        placeholder='Enter a strong password'
                         {...field}
-                        onChange={(e) => {
+                        onChange={e => {
                           field.onChange(e);
                           handlePasswordChange(e.target.value);
                         }}
-                        className="h-10 pr-10"
+                        className='h-10 pr-10'
                       />
                       <button
-                        type="button"
+                        type='button'
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                        className='absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground'
                       >
                         {showPassword ? (
-                          <EyeOff className="h-4 w-4" />
+                          <EyeOff className='h-4 w-4' />
                         ) : (
-                          <Eye className="h-4 w-4" />
+                          <Eye className='h-4 w-4' />
                         )}
                       </button>
                     </div>
                   </FormControl>
                   {password && (
-                    <div className="mt-3 space-y-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs text-muted-foreground">Password strength:</span>
-                        <div className="flex-1 h-2 bg-gray-700 rounded-full overflow-hidden">
+                    <div className='mt-3 space-y-2'>
+                      <div className='flex items-center gap-2'>
+                        <span className='text-xs text-muted-foreground'>
+                          Password strength:
+                        </span>
+                        <div className='flex-1 h-2 bg-gray-700 rounded-full overflow-hidden'>
                           <div
                             className={`h-full ${getPasswordStrengthColor()} transition-all`}
                             style={{
@@ -191,24 +197,46 @@ export function VendorAdminForm({
                             }}
                           />
                         </div>
-                        <span className="text-xs font-medium capitalize">
+                        <span className='text-xs font-medium capitalize'>
                           {passwordStrength || 'N/A'}
                         </span>
                       </div>
-                      <ul className="text-xs space-y-1 text-muted-foreground">
-                        <li className={password.length >= 8 ? 'text-green-500' : ''}>
+                      <ul className='text-xs space-y-1 text-muted-foreground'>
+                        <li
+                          className={
+                            password.length >= 8 ? 'text-green-500' : ''
+                          }
+                        >
                           ✓ At least 8 characters
                         </li>
-                        <li className={/[A-Z]/.test(password) ? 'text-green-500' : ''}>
+                        <li
+                          className={
+                            /[A-Z]/.test(password) ? 'text-green-500' : ''
+                          }
+                        >
                           ✓ Uppercase letter
                         </li>
-                        <li className={/[a-z]/.test(password) ? 'text-green-500' : ''}>
+                        <li
+                          className={
+                            /[a-z]/.test(password) ? 'text-green-500' : ''
+                          }
+                        >
                           ✓ Lowercase letter
                         </li>
-                        <li className={/[0-9]/.test(password) ? 'text-green-500' : ''}>
+                        <li
+                          className={
+                            /[0-9]/.test(password) ? 'text-green-500' : ''
+                          }
+                        >
                           ✓ Number
                         </li>
-                        <li className={/[!@#$%^&*(),.?":{}|<>]/.test(password) ? 'text-green-500' : ''}>
+                        <li
+                          className={
+                            /[!@#$%^&*(),.?":{}|<>]/.test(password)
+                              ? 'text-green-500'
+                              : ''
+                          }
+                        >
                           ✓ Special character
                         </li>
                       </ul>
@@ -221,51 +249,55 @@ export function VendorAdminForm({
             {/* Confirm Password */}
             <FormField
               control={form.control}
-              name="confirmPassword"
+              name='confirmPassword'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Confirm Password</FormLabel>
                   <FormControl>
-                    <div className="relative">
+                    <div className='relative'>
                       <Input
                         type={showConfirmPassword ? 'text' : 'password'}
-                        placeholder="Confirm your password"
+                        placeholder='Confirm your password'
                         {...field}
-                        className="h-10 pr-10"
+                        className='h-10 pr-10'
                       />
                       <button
-                        type="button"
-                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                        type='button'
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
+                        className='absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground'
                       >
                         {showConfirmPassword ? (
-                          <EyeOff className="h-4 w-4" />
+                          <EyeOff className='h-4 w-4' />
                         ) : (
-                          <Eye className="h-4 w-4" />
+                          <Eye className='h-4 w-4' />
                         )}
                       </button>
                     </div>
                   </FormControl>
-                  {password && form.watch('confirmPassword') && password === form.watch('confirmPassword') && (
-                    <Alert className="mt-2 border-green-500 bg-green-500/10">
-                      <AlertDescription className="text-green-500 text-sm">
-                        ✓ Passwords match
-                      </AlertDescription>
-                    </Alert>
-                  )}
+                  {password &&
+                    form.watch('confirmPassword') &&
+                    password === form.watch('confirmPassword') && (
+                      <Alert className='mt-2 border-green-500 bg-green-500/10'>
+                        <AlertDescription className='text-green-500 text-sm'>
+                          ✓ Passwords match
+                        </AlertDescription>
+                      </Alert>
+                    )}
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <div className="flex flex-col gap-2 pt-4">
+            <div className='flex flex-col gap-2 pt-4'>
               <Button
-                type="submit"
-                className="w-full h-10"
+                type='submit'
+                className='w-full h-10'
                 disabled={isLoading || !form.formState.isValid}
               >
                 {isLoading ? (
                   <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                     Creating Vendor...
                   </>
                 ) : (
@@ -274,9 +306,9 @@ export function VendorAdminForm({
               </Button>
               {onBack && (
                 <Button
-                  type="button"
-                  variant="outline"
-                  className="w-full h-10"
+                  type='button'
+                  variant='outline'
+                  className='w-full h-10'
                   onClick={onBack}
                   disabled={isLoading}
                 >

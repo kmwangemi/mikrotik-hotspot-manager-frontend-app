@@ -10,7 +10,10 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import { routerFormSchema, type RouterFormData } from '@/lib/schemas/router';
+import {
+  routerFormSchema,
+  type RouterFormData,
+} from '@/lib/validations/router';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { AlertCircle, ArrowLeft, CheckCircle2, Loader2 } from 'lucide-react';

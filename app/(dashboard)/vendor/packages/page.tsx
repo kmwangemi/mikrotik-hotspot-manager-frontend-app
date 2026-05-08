@@ -55,7 +55,7 @@ export default function PackagesPage() {
             Manage your hotspot packages
           </p>
         </div>
-        <Link href='/dashboard/vendor/packages/add'>
+        <Link href='/vendor/packages/add'>
           <Button className='bg-primary hover:bg-primary/90 text-primary-foreground gap-2'>
             <Plus className='w-4 h-4' />
             Add Package
@@ -219,7 +219,7 @@ export default function PackagesPage() {
         ) : (
           <div className='flex flex-col items-center justify-center h-64 rounded-lg border border-border bg-card'>
             <p className='text-muted-foreground mb-4'>No packages yet</p>
-            <Link href='/dashboard/vendor/packages/add'>
+            <Link href='/vendor/packages/add'>
               <Button className='bg-primary hover:bg-primary/90 text-primary-foreground gap-2'>
                 <Plus className='w-4 h-4' />
                 Create First Package

@@ -37,7 +37,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en' className='dark bg-background'>
-      <body className='font-sans antialiased'>
+      <body className='font-sans antialiased suppressHydrationWarning'>
         <QueryProvider>
           {children}
           <Toaster />
