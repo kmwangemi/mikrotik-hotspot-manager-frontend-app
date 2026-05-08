@@ -29,7 +29,7 @@ import { useForm } from 'react-hook-form';
 export default function SignupPage() {
   const router = useRouter();
   const { toast } = useToast();
-  const { login } = useAuthStore();
+  const { setUser } = useAuthStore();
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<SignupFormData>({
@@ -56,7 +56,7 @@ export default function SignupPage() {
         role: data.role as 'superadmin' | 'vendor_admin',
         vendorId: data.role === 'vendor_admin' ? 'v_new' : undefined,
       };
-      login(newUser);
+      setUser(newUser as any);
       toast({
         title: 'Success',
         description: 'Account created successfully',

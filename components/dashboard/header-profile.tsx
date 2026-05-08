@@ -21,9 +21,9 @@ export function HeaderProfile() {
 
   if (!user) return null;
 
-  const profilePicture = user.profilePicture || null;
+  const profilePicture = user.profile_picture_url || null;
   const initials =
-    `${user.firstName?.[0] || ''}${user.lastName?.[0] || ''}`.toUpperCase();
+    `${user.first_name?.[0] || ''}${user.last_name?.[0] || ''}`.toUpperCase();
 
   return (
     <div className='relative'>
@@ -36,7 +36,7 @@ export function HeaderProfile() {
           {profilePicture ? (
             <Image
               src={profilePicture}
-              alt={user.name || 'Profile'}
+              alt={(user.first_name ? user.first_name + ' ' + user.last_name : '') || 'Profile'}
               width={40}
               height={40}
               className='w-full h-full object-cover'
@@ -59,7 +59,7 @@ export function HeaderProfile() {
             {/* User Info */}
             <div className='px-4 py-3 border-b border-border bg-background/50'>
               <p className='text-sm font-semibold text-foreground'>
-                {user.name}
+                {(user.first_name ? user.first_name + ' ' + user.last_name : '')}
               </p>
               <p className='text-xs text-muted-foreground truncate'>
                 {user.email}

@@ -147,7 +147,7 @@ export function Sidebar() {
       <div className='border-t border-sidebar-border p-4 space-y-2'>
         <div className='px-2 py-2'>
           <p className='text-xs text-sidebar-foreground font-semibold'>
-            {user?.name}
+            {(user?.first_name ? user.first_name + ' ' + user.last_name : '')}
           </p>
           <p className='text-xs text-sidebar-foreground/70'>
             {user?.email}

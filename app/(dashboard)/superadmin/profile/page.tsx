@@ -43,7 +43,7 @@ export default function SuperAdminProfilePage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [profilePicture, setProfilePicture] = useState(
-    user.profilePicture || '',
+    user?.profile_picture_url || '',
   );
 
   if (!user) {
@@ -54,11 +54,11 @@ export default function SuperAdminProfilePage() {
   const infoForm = useForm({
     resolver: zodResolver(profileUpdateSchema),
     defaultValues: {
-      firstName: user.firstName || '',
-      lastName: user.lastName || '',
+      firstName: user.first_name || '',
+      lastName: user.last_name || '',
       email: user.email || '',
-      phone: user.phone || '',
-      company: user.company || '',
+      phone: user.phone_number || '',
+      company: user.vendor_id || '',
     },
   });
 
@@ -134,7 +134,7 @@ export default function SuperAdminProfilePage() {
       <ProfilePictureUpload
         currentImage={profilePicture}
         onImageChange={setProfilePicture}
-        userName={user.name}
+        userName={(user.first_name ? user.first_name + ' ' + user.last_name : '')}
       />
       <div className='grid gap-6'>
         {/* Profile Information Card */}

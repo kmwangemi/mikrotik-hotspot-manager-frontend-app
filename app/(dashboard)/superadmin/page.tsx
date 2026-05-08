@@ -20,7 +20,9 @@ import {
   generateTopPackagesData,
   generateTransactionVolumeData,
 } from '@/lib/api/mockData';
-import { useRevenueData, useRouters, useVendors } from '@/lib/api/queries';
+import { useRevenueData } from '@/hooks/queries/useAnalytics';
+import { useRouters } from '@/hooks/queries/useRouters';
+import { useVendors } from '@/hooks/queries/useVendors';
 import { useAuthStore } from '@/lib/store/auth';
 import { useQuery } from '@tanstack/react-query';
 import { Building2, DollarSign, TrendingUp, Users } from 'lucide-react';
@@ -62,7 +64,7 @@ export default function SuperAdminDashboard() {
       <div className="flex items-start justify-between">
         <div>
           <h1 className="text-3xl font-bold text-foreground">Platform Dashboard</h1>
-          <p className="text-muted-foreground mt-1">Welcome back, {user?.name}</p>
+          <p className="text-muted-foreground mt-1">Welcome back, {(user?.first_name ? user.first_name + ' ' + user.last_name : '')}</p>
         </div>
         <Select value={dateRange} onValueChange={setDateRange}>
           <SelectTrigger className="w-48 bg-card border-border">

@@ -42,7 +42,7 @@ export default function VendorProfilePage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [profilePicture, setProfilePicture] = useState(
-    user.profilePicture || '',
+    user?.profile_picture_url || '',
   );
 
   if (!user) {
@@ -57,8 +57,8 @@ export default function VendorProfilePage() {
       businessEmail: user.email || '',
       phone: '+1 (555) 123-4567',
       subdomain: 'techflow',
-      firstName: user.firstName || '',
-      lastName: user.lastName || '',
+      firstName: user.first_name || '',
+      lastName: user.last_name || '',
     },
   });
 
@@ -134,7 +134,7 @@ export default function VendorProfilePage() {
       <ProfilePictureUpload
         currentImage={profilePicture}
         onImageChange={setProfilePicture}
-        userName={user.name}
+        userName={(user.first_name ? user.first_name + ' ' + user.last_name : '')}
       />
       <div className='grid gap-6'>
         {/* Business Information Card */}

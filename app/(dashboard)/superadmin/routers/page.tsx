@@ -4,7 +4,7 @@ import { RouterStatusCard } from '@/components/dashboard/router-status-card';
 import { StatCard } from '@/components/dashboard/stat-card';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useRouters } from '@/lib/api/queries';
+import { useRouters } from '@/hooks/queries/useRouters';
 import {
   AlertCircle,
   ChevronLeft,

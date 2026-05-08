@@ -12,14 +12,14 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
-import { useSessions } from '@/lib/api/queries';
+import { useSessions } from '@/hooks/queries/useSessions';
 import { useAuthStore } from '@/lib/store/auth';
 import { ChevronLeft, ChevronRight, Power } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
 export default function SessionsPage() {
   const { user } = useAuthStore();
-  const { data: sessions, isLoading } = useSessions(user?.vendorId);
+  const { data: sessions, isLoading } = useSessions(user?.vendor_id ?? undefined);
   const { toast } = useToast();
   const [kickSessionId, setKickSessionId] = useState<string | null>(null);
   const [isKickingSession, setIsKickingSession] = useState(false);

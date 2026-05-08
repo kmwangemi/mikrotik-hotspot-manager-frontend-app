@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { usePackages } from '@/lib/api/queries';
+import { usePackages } from '@/hooks/queries/usePackages';
 import { useAuthStore } from '@/lib/store/auth';
 import {
   ChevronLeft,
@@ -18,7 +18,7 @@ import { useMemo, useState } from 'react';
 
 export default function PackagesPage() {
   const { user } = useAuthStore();
-  const { data: packages, isLoading } = usePackages(user?.vendorId);
+  const { data: packages, isLoading } = usePackages(user?.vendor_id ?? undefined);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;

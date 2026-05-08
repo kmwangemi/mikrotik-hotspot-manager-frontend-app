@@ -19,12 +19,10 @@ import {
   generateSessionData,
   generateTopPackagesData,
 } from '@/lib/api/mockData';
-import {
-  useRevenueData,
-  useRouters,
-  useSessions,
-  useTransactions,
-} from '@/lib/api/queries';
+import { useRevenueData } from '@/hooks/queries/useAnalytics';
+import { useRouters } from '@/hooks/queries/useRouters';
+import { useSessions } from '@/hooks/queries/useSessions';
+import { useTransactions } from '@/hooks/queries/useTransactions';
 import { useAuthStore } from '@/lib/store/auth';
 import { useQuery } from '@tanstack/react-query';
 import { Activity, DollarSign, TrendingUp, Users } from 'lucide-react';
@@ -32,7 +30,7 @@ import { useState } from 'react';
 
 export default function VendorDashboard() {
   const { user } = useAuthStore();
-  const vendorId = user?.vendorId;
+  const vendorId = user?.vendor_id ?? undefined;
   const [dateRange, setDateRange] = useState('30');
 
   const { data: revenueData } = useRevenueData(vendorId);
@@ -72,7 +70,7 @@ export default function VendorDashboard() {
         <div>
           <h1 className='text-3xl font-bold text-foreground'>Dashboard</h1>
           <p className='text-sm text-muted-foreground mt-1'>
-            Welcome back, {user?.name}
+            Welcome back, {(user?.first_name ? user.first_name + ' ' + user.last_name : '')}
           </p>
         </div>
         <Select value={dateRange} onValueChange={setDateRange}>

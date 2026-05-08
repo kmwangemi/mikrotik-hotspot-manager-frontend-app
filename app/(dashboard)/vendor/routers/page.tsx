@@ -3,7 +3,7 @@
 import { RouterStatusCard } from '@/components/dashboard/router-status-card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useRouters } from '@/lib/api/queries';
+import { useRouters } from '@/hooks/queries/useRouters';
 import { useAuthStore } from '@/lib/store/auth';
 import { ChevronLeft, ChevronRight, Plus, Search } from 'lucide-react';
 import Link from 'next/link';
@@ -11,7 +11,7 @@ import { useMemo, useState } from 'react';
 
 export default function RoutersPage() {
   const { user } = useAuthStore();
-  const { data: routers, isLoading } = useRouters(user?.vendorId);
+  const { data: routers, isLoading } = useRouters(user?.vendor_id ?? undefined);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;

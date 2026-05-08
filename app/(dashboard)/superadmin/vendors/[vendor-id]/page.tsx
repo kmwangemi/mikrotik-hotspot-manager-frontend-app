@@ -21,7 +21,7 @@ import {
   generateTopPackagesData,
   generateTransactionVolumeData,
 } from '@/lib/api/mockData';
-import { useVendorDetails } from '@/lib/api/queries';
+import { useVendorDetails } from '@/hooks/queries/useVendors';
 import { useQuery } from '@tanstack/react-query';
 import {
   ArrowLeft,
