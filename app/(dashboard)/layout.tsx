@@ -3,6 +3,7 @@
 import { HeaderProfile } from '@/components/dashboard/header-profile';
 import { MobileNav } from '@/components/dashboard/mobile-nav';
 import { Sidebar } from '@/components/dashboard/sidebar';
+import { useProfile } from '@/hooks/queries/useProfile';
 import { useAuthStore } from '@/lib/store/auth';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -13,15 +14,36 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const { isAuthenticated } = useAuthStore();
+  const { checkAuth, hasHydrated } = useAuthStore();
+  const { isLoading, isError } = useProfile();
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!hasHydrated) return;
+    if (!checkAuth()) {
       router.push('/login');
     }
-  }, [isAuthenticated, router]);
-  if (!isAuthenticated) {
-    return null;
+  }, [hasHydrated, checkAuth, router]);
+  // Profile fetch failed — token likely expired or invalid
+  useEffect(() => {
+    if (isError) {
+      router.push('/login');
+    }
+  }, [isError, router]);
+  // Wait for persisted state to load
+  if (!hasHydrated) return null;
+  // Redirect if not authenticated
+  if (!checkAuth()) return null;
+  // Show loading spinner while fetching profile
+  if (isLoading) {
+    return (
+      <div className='flex h-screen items-center justify-center bg-background'>
+        <div className='flex flex-col items-center gap-3'>
+          <div className='w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin' />
+          <p className='text-sm text-muted-foreground'>Loading...</p>
+        </div>
+      </div>
+    );
   }
+  if (isError) return null;
   return (
     <div className='flex h-screen bg-background'>
       {/* Desktop Sidebar - Hidden on Mobile */}

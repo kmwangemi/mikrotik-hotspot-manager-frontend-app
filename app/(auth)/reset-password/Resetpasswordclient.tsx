@@ -15,7 +15,7 @@ import { useToast } from '@/hooks/use-toast';
 import {
   resetPasswordSchema,
   type ResetPasswordFormData,
-} from '@/lib/schemas/auth';
+} from '@/lib/validations/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeft, Check, Eye, EyeOff, X } from 'lucide-react';
 import Link from 'next/link';

@@ -10,23 +10,18 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useToast } from '@/hooks/use-toast';
-import { loginSchema, type LoginFormData } from '@/lib/schemas/auth';
-import { useAuthStore } from '@/lib/store/auth';
+import { useLogin } from '@/hooks/queries/useAuth';
+import { handleApiError } from '@/lib/api';
+import { loginSchema, type LoginFormData } from '@/lib/validations/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Eye, EyeOff } from 'lucide-react';
+import { AlertCircle, Eye, EyeOff } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 export default function LoginPage() {
-  const router = useRouter();
-  const { toast } = useToast();
-  const { login } = useAuthStore();
-  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
+  const { mutate: login, isPending, error } = useLogin();
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -34,40 +29,7 @@ export default function LoginPage() {
       password: '',
     },
   });
-
-  const onSubmit = async (data: LoginFormData) => {
-    setIsLoading(true);
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 500));
-      // Mock authentication - in production, verify against backend
-      const mockUser = {
-        id: '1',
-        email: data.email,
-        name: data.email.split('@')[0],
-        role: data.email.includes('admin')
-          ? ('superadmin' as const)
-          : ('vendor_admin' as const),
-        vendorId: data.email.includes('admin') ? undefined : 'v1',
-      };
-      login(mockUser);
-      toast({
-        title: 'Success',
-        description: 'Logged in successfully',
-      });
-      // Redirect based on role
-      router.push(mockUser.role === 'superadmin' ? '/superadmin' : '/vendor');
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'Failed to login. Please try again.',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+  const onSubmit = (values: LoginFormData) => login(values);
   return (
     <div className='min-h-screen bg-linear-to-br from-background via-background to-background/80 flex items-center justify-center p-4'>
       <div className='w-full max-w-md'>
@@ -84,6 +46,12 @@ export default function LoginPage() {
               Sign in to your account
             </p>
           </div>
+          {error && (
+            <div className='p-3 bg-[#ef4444]/10 border border-[#ef4444]/30 rounded flex gap-2'>
+              <AlertCircle className='w-5 h-5 text-[#ef4444] shrink-0 mt-0.5' />
+              <p className='text-sm text-[#ef4444]'>{handleApiError(error)}</p>
+            </div>
+          )}
           {/* Form */}
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
@@ -97,7 +65,7 @@ export default function LoginPage() {
                       <Input
                         placeholder='you@example.com'
                         type='email'
-                        disabled={isLoading}
+                        disabled={isPending}
                         {...field}
                         className='bg-background border-border'
                       />
@@ -127,7 +95,7 @@ export default function LoginPage() {
                           placeholder='Enter new password'
                           {...field}
                           className='bg-background border-border pr-10'
-                          disabled={isLoading}
+                          disabled={isPending}
                         />
                         <button
                           type='button'
@@ -148,31 +116,13 @@ export default function LoginPage() {
               />
               <Button
                 type='submit'
-                disabled={isLoading}
+                disabled={isPending}
                 className='w-full bg-primary hover:bg-primary/90 text-primary-foreground'
               >
-                {isLoading ? 'Signing in...' : 'Sign in'}
+                {isPending ? 'Signing in...' : 'Sign in'}
               </Button>
             </form>
           </Form>
-          {/* Demo credentials */}
-          <div className='pt-4 border-t border-border space-y-3'>
-            <p className='text-xs text-muted-foreground'>Demo credentials:</p>
-            <div className='space-y-2'>
-              <div className='text-xs text-muted-foreground'>
-                <p>
-                  <span className='font-semibold'>SuperAdmin:</span>{' '}
-                  admin@example.com
-                </p>
-              </div>
-              <div className='text-xs text-muted-foreground'>
-                <p>
-                  <span className='font-semibold'>Vendor:</span>{' '}
-                  vendor@example.com
-                </p>
-              </div>
-            </div>
-          </div>
           {/* Sign up link */}
           <div className='text-center text-sm text-muted-foreground'>
             Don&apos;t have an account?{' '}

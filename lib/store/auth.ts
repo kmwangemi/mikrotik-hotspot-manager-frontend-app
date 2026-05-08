@@ -1,32 +1,49 @@
+import { AuthState } from '@/types/user';
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
-export type UserRole = 'superadmin' | 'vendor_admin';
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set, get) => ({
+      user: null,
+      token: null,
+      refreshToken: null,
+      hasHydrated: false,
 
-interface User {
-  id: string;
-  email: string;
-  name: string;
-  firstName?: string;
-  lastName?: string;
-  role: UserRole;
-  vendorId?: string;
-  profilePicture?: string;
-  phone?: string;
-  company?: string;
-}
+      setUser: user => set({ user }),
+      setToken: token => set({ token }),
+      setRefreshToken: token => set({ refreshToken: token }),
 
-interface AuthState {
-  user: User | null;
-  isAuthenticated: boolean;
-  login: (user: User) => void;
-  logout: () => void;
-  setUser: (user: User | null) => void;
-}
+      logout: () => set({ user: null, token: null, refreshToken: null }),
 
-export const useAuthStore = create<AuthState>(set => ({
-  user: null,
-  isAuthenticated: false,
-  login: user => set({ user, isAuthenticated: true }),
-  logout: () => set({ user: null, isAuthenticated: false }),
-  setUser: user => set({ user, isAuthenticated: user !== null }),
-}));
+      // checkAuth: () => !!get().token && !!get().user,
+
+      // After — token is enough to be "authenticated"
+      checkAuth: () => !!get().token,
+
+      setHasHydrated: state => set({ hasHydrated: state }),
+
+      // Helpers
+      isSuperAdmin: () => get().user?.role === 'superadmin',
+      isVendor: () => get().user?.role === 'vendor',
+      getSubdomain: () => get().user?.subdomain ?? null,
+    }),
+    {
+      name: 'auth-storage',
+      partialize: state => ({
+        user: state.user,
+        token: state.token,
+        refreshToken: state.refreshToken,
+      }),
+      onRehydrateStorage: () => state => {
+        state?.setHasHydrated(true);
+      },
+    },
+  ),
+);
+
+// const { isSuperAdmin, getSubdomain } = useAuthStore();
+
+// if (isSuperAdmin()) { ... }
+
+// const subdomain = getSubdomain(); // "techflow" or null

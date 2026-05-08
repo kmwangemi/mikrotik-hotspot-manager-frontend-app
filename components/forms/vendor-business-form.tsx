@@ -22,7 +22,7 @@ import { Input } from '@/components/ui/input';
 import {
   businessInfoSchema,
   type BusinessInfoFormData,
-} from '@/lib/schemas/vendor';
+} from '@/lib/validations/vendor';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
 import { useState } from 'react';

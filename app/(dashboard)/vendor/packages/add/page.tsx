@@ -19,7 +19,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { packageFormSchema } from '@/lib/schemas/package';
+import { packageFormSchema } from '@/lib/validations/package';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeft, Save } from 'lucide-react';
 import Link from 'next/link';
@@ -56,7 +56,7 @@ export default function AddPackagePage() {
         title: 'Success',
         description: 'Package created successfully.',
       });
-      router.push('/dashboard/vendor/packages');
+      router.push('/vendor/packages');
     } catch (error) {
       toast({
         title: 'Error',
@@ -72,7 +72,7 @@ export default function AddPackagePage() {
     <div className='space-y-6 p-8'>
       {/* Header */}
       <div className='flex items-center gap-4'>
-        <Link href='/dashboard/vendor/packages'>
+        <Link href='/vendor/packages'>
           <Button variant='outline' size='icon'>
             <ArrowLeft className='w-4 h-4' />
           </Button>
@@ -298,7 +298,7 @@ export default function AddPackagePage() {
               />
               {/* Actions */}
               <div className='flex gap-2 pt-4'>
-                <Link href='/dashboard/vendor/packages'>
+                <Link href='/vendor/packages'>
                   <Button type='button' variant='outline'>
                     Cancel
                   </Button>

@@ -20,7 +20,7 @@ import {
 } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { usePackages, useRouters } from '@/lib/api/queries';
-import { hotspotUserFormSchema } from '@/lib/schemas/user';
+import { hotspotUserFormSchema } from '@/lib/validations/user';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeft, Save } from 'lucide-react';
 import Link from 'next/link';
@@ -59,7 +59,7 @@ export default function AddUserPage() {
         title: 'Success',
         description: 'Hotspot user created successfully.',
       });
-      router.push('/dashboard/vendor/users');
+      router.push('/vendor/users');
     } catch (error) {
       toast({
         title: 'Error',
@@ -75,7 +75,7 @@ export default function AddUserPage() {
     <div className='space-y-6 p-8'>
       {/* Header */}
       <div className='flex items-center gap-4'>
-        <Link href='/dashboard/vendor/users'>
+        <Link href='/vendor/users'>
           <Button variant='outline' size='icon'>
             <ArrowLeft className='w-4 h-4' />
           </Button>
@@ -313,7 +313,7 @@ export default function AddUserPage() {
               </div>
               {/* Actions */}
               <div className='flex gap-2 pt-4'>
-                <Link href='/dashboard/vendor/users'>
+                <Link href='/vendor/users'>
                   <Button type='button' variant='outline'>
                     Cancel
                   </Button>

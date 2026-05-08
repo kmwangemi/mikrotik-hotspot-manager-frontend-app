@@ -2,24 +2,27 @@
 
 import LandingPage from '@/components/landing-page';
 import { useAuthStore } from '@/lib/store/auth';
+import { decodeToken } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 export default function HomePage() {
   const router = useRouter();
-  const { isAuthenticated, user } = useAuthStore();
+  const { checkAuth, user, token, hasHydrated } = useAuthStore();
   useEffect(() => {
-    if (isAuthenticated && user) {
-      if (user.role === 'superadmin') {
-        router.push('/dashboard/superadmin');
-      } else {
-        router.push('/dashboard/vendor');
-      }
+    if (!hasHydrated) return;
+    if (!checkAuth()) return;
+    // Use stored user role if available, otherwise decode from token
+    const role = user?.role ?? decodeToken(token!).role;
+    if (role === 'superadmin') {
+      router.push('/superadmin');
+    } else {
+      router.push('/vendor');
     }
-  }, [isAuthenticated, user, router]);
-  // Show landing page if not authenticated
-  if (isAuthenticated) {
-    return null;
-  }
+  }, [hasHydrated, checkAuth, user, token, router]);
+  // Wait for persisted state to load
+  if (!hasHydrated) return null;
+  // Already authenticated — return null while redirect happens
+  if (checkAuth()) return null;
   return <LandingPage />;
 }

@@ -1,7 +1,13 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -12,7 +18,10 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { emailVerificationSchema, type EmailVerificationFormData } from '@/lib/schemas/vendor';
+import {
+  emailVerificationSchema,
+  type EmailVerificationFormData,
+} from '@/lib/validations/vendor';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
@@ -47,11 +56,11 @@ export function EmailVerificationForm({
     if (resendCooldown > 0) return;
 
     onResendCode();
-    setResendAttempts((prev) => prev + 1);
+    setResendAttempts(prev => prev + 1);
     setResendCooldown(60); // 60 second cooldown
 
     const interval = setInterval(() => {
-      setResendCooldown((prev) => {
+      setResendCooldown(prev => {
         if (prev <= 1) {
           clearInterval(interval);
           return 0;
@@ -66,19 +75,20 @@ export function EmailVerificationForm({
   };
 
   return (
-    <Card className="w-full">
+    <Card className='w-full'>
       <CardHeader>
-        <CardTitle className="text-2xl">Verify Email Address</CardTitle>
+        <CardTitle className='text-2xl'>Verify Email Address</CardTitle>
         <CardDescription>
-          We&apos;ve sent a 6-digit verification code to <span className="font-medium text-foreground">{email}</span>
+          We&apos;ve sent a 6-digit verification code to{' '}
+          <span className='font-medium text-foreground'>{email}</span>
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
             <FormField
               control={form.control}
-              name="verificationCode"
+              name='verificationCode'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Verification Code</FormLabel>
@@ -87,29 +97,33 @@ export function EmailVerificationForm({
                   </FormDescription>
                   <FormControl>
                     <Input
-                      placeholder="000000"
+                      placeholder='000000'
                       maxLength={6}
                       {...field}
-                      onChange={(e) => {
-                        const value = e.target.value.replace(/\D/g, '').slice(0, 6);
+                      onChange={e => {
+                        const value = e.target.value
+                          .replace(/\D/g, '')
+                          .slice(0, 6);
                         field.onChange(value);
                       }}
-                      className="h-10 text-center text-xl tracking-widest"
+                      className='h-10 text-center text-xl tracking-widest'
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <div className="flex flex-col gap-2">
+            <div className='flex flex-col gap-2'>
               <Button
-                type="submit"
-                className="w-full h-10"
-                disabled={isVerifying || form.watch('verificationCode').length !== 6}
+                type='submit'
+                className='w-full h-10'
+                disabled={
+                  isVerifying || form.watch('verificationCode').length !== 6
+                }
               >
                 {isVerifying ? (
                   <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                     Verifying...
                   </>
                 ) : (
@@ -117,9 +131,9 @@ export function EmailVerificationForm({
                 )}
               </Button>
               <Button
-                type="button"
-                variant="outline"
-                className="w-full h-10"
+                type='button'
+                variant='outline'
+                className='w-full h-10'
                 disabled={resendCooldown > 0}
                 onClick={handleResendCode}
               >
@@ -129,9 +143,9 @@ export function EmailVerificationForm({
               </Button>
               {onBack && (
                 <Button
-                  type="button"
-                  variant="ghost"
-                  className="w-full h-10"
+                  type='button'
+                  variant='ghost'
+                  className='w-full h-10'
                   onClick={onBack}
                   disabled={isVerifying}
                 >
@@ -140,8 +154,11 @@ export function EmailVerificationForm({
               )}
             </div>
             {resendAttempts > 2 && (
-              <div className="text-sm text-muted-foreground text-center">
-                Having trouble? <a href="#" className="text-primary hover:underline">Contact support</a>
+              <div className='text-sm text-muted-foreground text-center'>
+                Having trouble?{' '}
+                <a href='#' className='text-primary hover:underline'>
+                  Contact support
+                </a>
               </div>
             )}
           </form>
