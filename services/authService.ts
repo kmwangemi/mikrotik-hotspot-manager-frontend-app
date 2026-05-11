@@ -13,8 +13,10 @@ export const authService = {
   register: async (payload: SignupFormData): Promise<LoginResponse> => {
     return api.post<LoginResponse>('/auth/register', payload);
   },
-  logout: async (): Promise<LogoutResponse> => {
-    return api.post<LogoutResponse>('/auth/logout');
+  logout: async (payload: {
+    refresh_token: string;
+  }): Promise<LogoutResponse> => {
+    return api.post<LogoutResponse>('/auth/logout', payload);
   },
   verifyOtp: async (payload: {
     email?: string;
