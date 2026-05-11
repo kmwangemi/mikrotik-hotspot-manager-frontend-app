@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import { useHotspotUsers } from '@/lib/api/queries';
+import { useHotspotUsers } from '@/hooks/queries/useHotspotUsers';
 import { useAuthStore } from '@/lib/store/auth';
 import { ChevronLeft, ChevronRight, Plus, Search, Trash2 } from 'lucide-react';
 import Link from 'next/link';
@@ -20,7 +20,7 @@ import { useMemo, useState } from 'react';
 
 export default function UsersPage() {
   const { user } = useAuthStore();
-  const { data: users, isLoading } = useHotspotUsers(user?.vendorId);
+  const { data: users, isLoading } = useHotspotUsers(user?.vendor_id ?? undefined);
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);

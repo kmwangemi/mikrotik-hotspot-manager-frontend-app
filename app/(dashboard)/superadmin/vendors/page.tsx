@@ -3,7 +3,7 @@
 import { StatCard } from '@/components/dashboard/stat-card';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useVendors } from '@/lib/api/queries';
+import { useVendors } from '@/hooks/queries/useVendors';
 import { Building2, ChevronLeft, ChevronRight, DollarSign, Plus, TrendingUp, Users } from 'lucide-react';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';

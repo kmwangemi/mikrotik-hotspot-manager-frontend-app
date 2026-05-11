@@ -17,15 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  useConversionRateData,
-  useDailyActiveUsersData,
-  useRevenueData,
-  useSessionDistributionData,
-  useTopPackagesData,
-  useTransactionVolumeData,
-  useUserGrowthData,
-} from '@/lib/api/queries';
+import { useConversionRateData, useDailyActiveUsersData, useRevenueData, useSessionDistributionData, useTopPackagesData, useTransactionVolumeData, useUserGrowthData } from '@/hooks/queries/useAnalytics';
 import { Calendar, X } from 'lucide-react';
 import { useState } from 'react';
 

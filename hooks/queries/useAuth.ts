@@ -2,7 +2,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useAuthStore } from '@/lib/store/auth';
 import { decodeToken } from '@/lib/utils';
 import { authService } from '@/services/authService';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 
 export function useLogin() {
@@ -20,16 +20,32 @@ export function useLogin() {
       // Profile fetch in dashboard layout will overwrite this with full data
       setUser({
         id: payload.sub,
-        role: payload.role,
-        subdomain: payload.subdomain ?? null,
-        email: '', // placeholder — profile fetch will fill this
+        email: '',
         first_name: '',
         last_name: '',
         phone_number: null,
-        profile_picture_url: null,
-        vendor_id: null,
+        role: payload.role,
         is_active: true,
         is_email_verified: true,
+        profile_picture_url: null,
+        vendor_id: null,
+        vendor: payload.subdomain
+          ? {
+              id: '',
+              business_name: '',
+              business_email: '',
+              business_phone_number: '',
+              subdomain: payload.subdomain,
+              business_address: null,
+              logo_url: null,
+              status: 'active',
+              referral_code: null,
+              created_at: '',
+              updated_at: '',
+            }
+          : null,
+        created_at: '',
+        updated_at: '',
       });
       toast({
         title: 'Success',
@@ -47,16 +63,18 @@ export function useLogin() {
 export function useLogout() {
   const router = useRouter();
   const { logout } = useAuthStore();
+  const queryClient = useQueryClient();
+  const clearSession = () => {
+    logout();
+    queryClient.clear();
+    router.push('/login');
+  };
   return useMutation({
-    mutationFn: authService.logout,
-    onSuccess: () => {
-      logout();
-      router.push('/(auth)/login');
+    mutationFn: (payload: { refresh_token: string }) => {
+      return authService.logout(payload);
     },
-    onError: () => {
-      logout();
-      router.push('/(auth)/login');
-    },
+    onSuccess: clearSession,
+    onError: clearSession,
   });
 }
 

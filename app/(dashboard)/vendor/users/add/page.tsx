@@ -19,7 +19,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { usePackages, useRouters } from '@/lib/api/queries';
+import { usePackages } from '@/hooks/queries/usePackages';
+import { useRouters } from '@/hooks/queries/useRouters';
 import { hotspotUserFormSchema } from '@/lib/validations/user';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeft, Save } from 'lucide-react';

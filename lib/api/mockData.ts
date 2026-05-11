@@ -31,6 +31,10 @@ export interface Vendor {
   revenue: number;
   activeUsers: number;
   activeSessions: number;
+  description?: string;
+  subdomain?: string;
+  referralCode?: string;
+  totalRouters?: number;
 }
 
 export interface Router {
@@ -66,6 +70,7 @@ export interface HotspotUser {
   status: 'active' | 'inactive' | 'expired';
   expiryDate: string;
   lastLogin?: string;
+  email?: string;
 }
 
 export interface Session {

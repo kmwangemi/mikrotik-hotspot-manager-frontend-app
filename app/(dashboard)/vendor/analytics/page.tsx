@@ -14,15 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  useConversionRateData,
-  useDailyActiveUsersData,
-  useRevenueData,
-  useSessionDistributionData,
-  useTopPackagesData,
-  useTransactionVolumeData,
-  useUserGrowthData,
-} from '@/lib/api/queries';
+import { useConversionRateData, useDailyActiveUsersData, useRevenueData, useSessionDistributionData, useTopPackagesData, useTransactionVolumeData, useUserGrowthData } from '@/hooks/queries/useAnalytics';
 import { useAuthStore } from '@/lib/store/auth';
 import { useState } from 'react';
 
@@ -30,7 +22,7 @@ export default function VendorAnalyticsPage() {
   const { user } = useAuthStore();
   const [dateRange, setDateRange] = useState('30');
 
-  const { data: revenueData } = useRevenueData(user?.vendorId);
+  const { data: revenueData } = useRevenueData(user?.vendor_id ?? undefined);
   const { data: userGrowthData } = useUserGrowthData();
   const { data: sessionDistributionData } = useSessionDistributionData();
   const { data: conversionRateData } = useConversionRateData();

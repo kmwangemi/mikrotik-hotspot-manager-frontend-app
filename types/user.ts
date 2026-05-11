@@ -1,36 +1,68 @@
+export type UserRole = 'superadmin' | 'vendor';
+export type VendorStatus = 'active' | 'pending' | 'suspended';
+// ─────────────────────────────────────────────────────────────────────────────
+// Auth / JWT
+// ─────────────────────────────────────────────────────────────────────────────
 export interface TokenPayload {
   sub: string;
-  role: 'superadmin' | 'vendor';
+  role: UserRole;
   subdomain: string | null;
   exp: number;
   iat: number;
   jti: string;
   type: string;
 }
-
+export interface LoginResponse {
+  access_token: string;
+  refresh_token: string;
+}
+// ─────────────────────────────────────────────────────────────────────────────
+// Vendor
+// ─────────────────────────────────────────────────────────────────────────────
+export interface Vendor {
+  id: string;
+  business_name: string;
+  business_email: string;
+  business_phone_number: string;
+  subdomain: string;
+  business_address: string | null;
+  logo_url: string | null;
+  status: VendorStatus;
+  referral_code: string | null;
+  created_at: string;
+  updated_at: string;
+}
+// ─────────────────────────────────────────────────────────────────────────────
+// User
+// ─────────────────────────────────────────────────────────────────────────────
 export interface UserResponse {
   id: string;
-  role: 'superadmin' | 'vendor';
-  subdomain: string | null;
   email: string;
   first_name: string;
   last_name: string;
   phone_number: string | null;
-  profile_picture_url: string | null;
-  vendor_id: string | null;
+  role: UserRole;
   is_active: boolean;
   is_email_verified: boolean;
+  profile_picture_url: string | null;
+  vendor_id: string | null;
+  vendor: Vendor | null;
+  created_at: string;
+  updated_at: string;
 }
-
+// Full profile
+export type UserProfile = UserResponse;
+// ─────────────────────────────────────────────────────────────────────────────
+// Auth Store
+// ─────────────────────────────────────────────────────────────────────────────
 export interface AuthState {
   user: UserResponse | null;
   token: string | null;
   refreshToken: string | null;
   hasHydrated: boolean;
-
-  setUser: (user: UserResponse) => void;
-  setToken: (token: string) => void;
-  setRefreshToken: (token: string) => void;
+  setUser: (user: UserResponse | null) => void;
+  setToken: (token: string | null) => void;
+  setRefreshToken: (token: string | null) => void;
   logout: () => void;
   checkAuth: () => boolean;
   setHasHydrated: (state: boolean) => void;
@@ -39,44 +71,33 @@ export interface AuthState {
   isVendor: () => boolean;
   getSubdomain: () => string | null;
 }
-
-export interface LoginResponse {
-  access_token: string;
-  refresh_token: string;
-}
-
-// ─── User / profile domain types ─────────────────────────────────────────────
-// Aligned to backend UserResponse, UserProfileUpdate, UserPerformanceStats
-
-// Full profile — GET /users/profile
-export interface UserProfile {
-  id: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  phone_number: string | null;
-  is_admin: boolean;
-  is_email_verified: boolean;
-  is_phone_number_verified: boolean;
-  is_active: boolean;
-  profile_picture_url: string | null;
-  createdAt: string;
-  updatedAt: string;
-}
-
-// PATCH /auth/password
-export interface ChangePasswordPayload {
-  currentPassword: string;
-  newPassword: string;
-  confirmPassword: string;
-}
-
-// ─── Payloads ─────────────────────────────────────────────────────────────────
-
-/** PATCH /users/profile — own profile only */
-export interface UpdateProfilePayload {
+// ─────────────────────────────────────────────────────────────────────────────
+// Profile Updates
+// ─────────────────────────────────────────────────────────────────────────────
+export interface UpdateUserPayload {
   first_name?: string;
   last_name?: string;
-  email?: string;
   phone_number?: string | null;
+  profile_picture_url?: string | null;
+}
+export interface UpdateVendorPayload {
+  business_name?: string;
+  business_email?: string;
+  business_phone_number?: string;
+  subdomain?: string;
+  business_address?: string | null;
+  logo_url?: string | null;
+  referral_code?: string | null;
+}
+export interface UpdateProfilePayload {
+  user?: UpdateUserPayload;
+  vendor?: UpdateVendorPayload;
+}
+// ─────────────────────────────────────────────────────────────────────────────
+// Password
+// ─────────────────────────────────────────────────────────────────────────────
+export interface ChangePasswordPayload {
+  current_password: string;
+  new_password: string;
+  confirm_password: string;
 }

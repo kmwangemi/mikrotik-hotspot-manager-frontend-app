@@ -1,29 +1,30 @@
 'use client';
 
+import { useLogout } from '@/hooks/queries/useAuth';
 import { useAuthStore } from '@/lib/store/auth';
 import { LogOut, Settings, User } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export function HeaderProfile() {
-  const router = useRouter();
-  const { user, logout } = useAuthStore();
+  const { user, refreshToken } = useAuthStore();
   const [isOpen, setIsOpen] = useState(false);
   const isSuperAdmin = user?.role === 'superadmin';
 
+  const { mutate: logout, isPending: isLoggingOut } = useLogout();
+
   const handleLogout = () => {
-    logout();
-    router.push('/login');
+    if (!refreshToken) return;
+    logout({ refresh_token: refreshToken });
     setIsOpen(false);
   };
 
   if (!user) return null;
 
-  const profilePicture = user.profilePicture || null;
+  const profilePicture = user.profile_picture_url || null;
   const initials =
-    `${user.firstName?.[0] || ''}${user.lastName?.[0] || ''}`.toUpperCase();
+    `${user.first_name?.[0] || ''}${user.last_name?.[0] || ''}`.toUpperCase();
 
   return (
     <div className='relative'>
@@ -36,7 +37,11 @@ export function HeaderProfile() {
           {profilePicture ? (
             <Image
               src={profilePicture}
-              alt={user.name || 'Profile'}
+              alt={
+                (user.first_name
+                  ? user.first_name + ' ' + user.last_name
+                  : '') || 'Profile'
+              }
               width={40}
               height={40}
               className='w-full h-full object-cover'
@@ -59,20 +64,16 @@ export function HeaderProfile() {
             {/* User Info */}
             <div className='px-4 py-3 border-b border-border bg-background/50'>
               <p className='text-sm font-semibold text-foreground'>
-                {user.name}
+                {user.first_name ? user.first_name + ' ' + user.last_name : ''}
               </p>
               <p className='text-xs text-muted-foreground truncate'>
-                {user.email}
+                {user?.vendor?.business_email || 'No business email'}
               </p>
             </div>
             {/* Menu Items */}
             <div className='py-2'>
               <Link
-                href={
-                  isSuperAdmin
-                    ? '/superadmin/profile'
-                    : '/vendor/profile'
-                }
+                href={isSuperAdmin ? '/superadmin/profile' : '/vendor/profile'}
               >
                 <button
                   onClick={() => setIsOpen(false)}
@@ -99,9 +100,10 @@ export function HeaderProfile() {
               <button
                 onClick={handleLogout}
                 className='w-full flex items-center gap-3 px-4 py-2 text-sm text-red-500 hover:bg-red-500/10 transition-colors'
+                disabled={isLoggingOut || !refreshToken}
               >
                 <LogOut className='w-4 h-4' />
-                <span>Logout</span>
+                <span>{isLoggingOut ? 'Signing out...' : 'Logout'}</span>
               </button>
             </div>
           </div>

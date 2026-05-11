@@ -26,7 +26,7 @@ export const useAuthStore = create<AuthState>()(
       // Helpers
       isSuperAdmin: () => get().user?.role === 'superadmin',
       isVendor: () => get().user?.role === 'vendor',
-      getSubdomain: () => get().user?.subdomain ?? null,
+      getSubdomain: () => get().user?.vendor?.subdomain ?? null,
     }),
     {
       name: 'auth-storage',

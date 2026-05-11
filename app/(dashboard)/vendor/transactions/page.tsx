@@ -4,14 +4,14 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { useTransactions } from '@/lib/api/queries';
+import { useTransactions } from '@/hooks/queries/useTransactions';
 import { useAuthStore } from '@/lib/store/auth';
 import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
 export default function TransactionsPage() {
   const { user } = useAuthStore();
-  const { data: transactions, isLoading } = useTransactions(user?.vendorId);
+  const { data: transactions, isLoading } = useTransactions(user?.vendor_id ?? undefined);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
