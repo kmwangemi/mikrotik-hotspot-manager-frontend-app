@@ -1,11 +1,21 @@
 import { z } from 'zod';
 
 export const profileUpdateSchema = z.object({
-  firstName: z.string().min(2, 'First name must be at least 2 characters'),
-  lastName: z.string().min(2, 'Last name must be at least 2 characters'),
-  email: z.string().email('Invalid email address'),
-  phone: z.string().optional(),
-  company: z.string().optional(),
+  user: z.object({
+    first_name: z.string().min(2, 'First name must be at least 2 characters'),
+    last_name: z.string().min(2, 'Last name must be at least 2 characters'),
+    email: z.string().email('Invalid email address'),
+    phone_number: z.string().optional(),
+    profile_picture_url: z.string().optional(),
+  }),
+  vendor: z.object({
+    business_name: z
+      .string()
+      .min(2, 'Business name must be at least 2 characters'),
+    business_email: z.string().email('Invalid business email'),
+    business_phone_number: z.string().optional(),
+    business_address: z.string().optional(),
+  }),
 });
 
 export const passwordChangeSchema = z
@@ -20,23 +30,10 @@ export const passwordChangeSchema = z
       .regex(/[!@#$%^&*]/, 'Password must contain a special character'),
     confirmPassword: z.string(),
   })
-  .refine((data) => data.newPassword === data.confirmPassword, {
+  .refine(data => data.newPassword === data.confirmPassword, {
     message: 'Passwords do not match',
     path: ['confirmPassword'],
   });
 
-export const vendorProfileUpdateSchema = z.object({
-  companyName: z.string().min(2, 'Company name must be at least 2 characters'),
-  businessEmail: z.string().email('Invalid business email'),
-  phone: z.string().optional(),
-  subdomain: z
-    .string()
-    .min(3, 'Subdomain must be at least 3 characters')
-    .regex(/^[a-z0-9-]+$/, 'Subdomain can only contain lowercase letters, numbers, and hyphens'),
-  firstName: z.string().min(2, 'First name must be at least 2 characters'),
-  lastName: z.string().min(2, 'Last name must be at least 2 characters'),
-});
-
 export type ProfileUpdate = z.infer<typeof profileUpdateSchema>;
 export type PasswordChange = z.infer<typeof passwordChangeSchema>;
-export type VendorProfileUpdate = z.infer<typeof vendorProfileUpdateSchema>;

@@ -20,14 +20,15 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { useLogout } from '@/hooks/queries/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { useAuthStore } from '@/lib/store/auth';
 import {
   passwordChangeSchema,
-  vendorProfileUpdateSchema,
+  profileUpdateSchema,
 } from '@/lib/validations/profile';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ArrowLeft, Eye, EyeOff, Lock, Save } from 'lucide-react';
+import { ArrowLeft, Eye, EyeOff, Lock, LogOut, Save } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -35,7 +36,7 @@ import { useForm } from 'react-hook-form';
 
 export default function VendorProfilePage() {
   const router = useRouter();
-  const { user, logout } = useAuthStore();
+  const { user, refreshToken } = useAuthStore();
   const { toast } = useToast();
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
@@ -50,15 +51,34 @@ export default function VendorProfilePage() {
     return null;
   }
 
+  const { mutate: logout, isPending: isLoggingOut } = useLogout();
+
+  const handleLogout = () => {
+    if (!refreshToken) return;
+    logout({ refresh_token: refreshToken });
+  };
+
   const infoForm = useForm({
-    resolver: zodResolver(vendorProfileUpdateSchema),
+    resolver: zodResolver(profileUpdateSchema),
     defaultValues: {
-      companyName: 'TechFlow Communications',
-      businessEmail: user.email || '',
-      phone: '+1 (555) 123-4567',
-      subdomain: 'techflow',
-      firstName: user.first_name || '',
-      lastName: user.last_name || '',
+      // Business details
+      vendor: {
+        business_name: user?.vendor?.business_name || '',
+        business_email: user?.vendor?.business_email || '',
+        business_phone_number: user?.vendor?.business_phone_number || '',
+        subdomain: user?.vendor?.subdomain || '',
+        business_address: user?.vendor?.business_address || '',
+        logo_url: user?.vendor?.logo_url || null,
+      },
+      // Admin details
+      user: {
+        first_name: user?.first_name || '',
+        last_name: user?.last_name || '',
+        email: user?.email || '',
+        phone_number: user?.phone_number || '',
+        role: user?.role || 'vendor',
+        profile_picture_url: user?.profile_picture_url || null,
+      },
     },
   });
 
@@ -134,7 +154,7 @@ export default function VendorProfilePage() {
       <ProfilePictureUpload
         currentImage={profilePicture}
         onImageChange={setProfilePicture}
-        userName={(user.first_name ? user.first_name + ' ' + user.last_name : '')}
+        userName={user.first_name ? user.first_name + ' ' + user.last_name : ''}
       />
       <div className='grid gap-6'>
         {/* Business Information Card */}
@@ -150,13 +170,13 @@ export default function VendorProfilePage() {
               >
                 <FormField
                   control={infoForm.control}
-                  name='companyName'
+                  name='vendor.business_name'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Company Name</FormLabel>
+                      <FormLabel>Business Name</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder='Your Company Name'
+                          placeholder='Your Business Name'
                           className='bg-background border-border'
                           {...field}
                         />
@@ -167,29 +187,7 @@ export default function VendorProfilePage() {
                 />
                 <FormField
                   control={infoForm.control}
-                  name='subdomain'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Subdomain</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder='subdomain'
-                          className='bg-background border-border'
-                          readOnly
-                          {...field}
-                        />
-                      </FormControl>
-                      <p className='text-xs text-muted-foreground mt-1'>
-                        Access your dashboard at: https://{field.value}
-                        .hotspotmanager.com
-                      </p>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={infoForm.control}
-                  name='businessEmail'
+                  name='vendor.business_email'
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Business Email</FormLabel>
@@ -207,13 +205,30 @@ export default function VendorProfilePage() {
                 />
                 <FormField
                   control={infoForm.control}
-                  name='phone'
+                  name='vendor.business_phone_number'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Phone Number</FormLabel>
+                      <FormLabel>Business Phone Number</FormLabel>
                       <FormControl>
                         <Input
                           placeholder='+1 (555) 000-0000'
+                          className='bg-background border-border'
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={infoForm.control}
+                  name='vendor.business_address'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Business Address</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder='123 Main Street, City, Country'
                           className='bg-background border-border'
                           {...field}
                         />
@@ -226,10 +241,10 @@ export default function VendorProfilePage() {
                   <h3 className='text-sm font-semibold mb-4'>
                     Administrator Information
                   </h3>
-                  <div className='grid grid-cols-2 gap-4'>
+                  <div className='grid grid-cols-2 gap-4 mb-4'>
                     <FormField
                       control={infoForm.control}
-                      name='firstName'
+                      name='user.first_name'
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>First Name</FormLabel>
@@ -246,13 +261,49 @@ export default function VendorProfilePage() {
                     />
                     <FormField
                       control={infoForm.control}
-                      name='lastName'
+                      name='user.last_name'
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Last Name</FormLabel>
                           <FormControl>
                             <Input
                               placeholder='Doe'
+                              className='bg-background border-border'
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className='grid grid-cols-2 gap-4'>
+                    <FormField
+                      control={infoForm.control}
+                      name='user.email'
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Email</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder='john.doe@example.com'
+                              className='bg-background border-border'
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={infoForm.control}
+                      name='user.phone_number'
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Phone Number</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder='123-456-7890'
                               className='bg-background border-border'
                               {...field}
                             />
@@ -431,12 +482,11 @@ export default function VendorProfilePage() {
                   </DialogTrigger>
                   <Button
                     variant='destructive'
-                    onClick={() => {
-                      logout();
-                      router.push('/login');
-                    }}
+                    onClick={handleLogout}
+                    disabled={isLoggingOut || !refreshToken}
                   >
-                    Logout
+                    <LogOut className='w-4 h-4' />
+                    <span>{isLoggingOut ? 'Signing out...' : 'Logout'}</span>
                   </Button>
                 </DialogFooter>
               </DialogContent>
